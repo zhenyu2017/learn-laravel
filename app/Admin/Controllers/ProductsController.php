@@ -51,30 +51,7 @@ class ProductsController extends AdminController
         return $grid;
     }
 
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        $show = new Show(Product::findOrFail($id));
-
-        $show->field('id', __('Id'));
-        $show->field('title', __('Title'));
-        $show->field('description', __('Description'));
-        $show->field('image', __('Image'));
-        $show->field('on_sale', __('On sale'));
-        $show->field('rating', __('Rating'));
-        $show->field('sold_count', __('Sold count'));
-        $show->field('review_count', __('Review count'));
-        $show->field('price', __('Price'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
-
-        return $show;
-    }
+   
 
     /**
      * Make a form builder.
