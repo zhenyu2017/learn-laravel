@@ -1,0 +1,7 @@
+
+1 如使用简短“Class@Method“方式绑定路由，
+需要将app/Providers/RouteServiceProvider.php中的
+protected $namespace = 'App\\Http\\Controllers'; 这一行的注释取消
+
+
+2创建
