@@ -48,7 +48,11 @@
                             <span class="stock"></span>
                         </div>
                         <div class="buttons">
+                            @if($favored)
+                            <button class="btn btn-danger btn-disfavor">取消收藏</button>
+                            @else
                             <button class="btn btn-success btn-favor">❤ 收藏</button>
+                            @endif
                             <button class="btn btn-primary btn-add-to-cart">加入购物车</button>
                         </div>
                     </div>
@@ -83,6 +87,34 @@
             $('.sku-btn').click(function(){
                 $('.product-info .price span').text($(this).data('price'));
                 $('.product-info .stock').text('库存：' + $(this).data('stock') + '件');
+            });
+
+            $('.btn-favor').click(function(){
+                axios.post('{{ route('products.favor', ['product' => $product->id]) }}')
+                .then(function(){
+                    //成功回调   
+                    swal('操作成功', '', 'success'); 
+                }, function(error){
+                    //失败回调 
+                    if (error.response && error.response.status === 401) {
+                        swal('请先登陆', '', 'error');
+                    } else if (error.response && (error.response.data.msg || error.response.data.message)){
+                        var msg = error.response.data.msg ? error.response.data.msg : error.response.data.message;
+                        swal(msg, '', 'error');
+                    } else {
+                        swal('系统错误', '', 'error');
+                    }
+                });//then结束
+            });
+
+            $('.btn-disfavor').click(function(){
+                axios.delete('{{ route('products.disfavor', ['product' => $product->id]) }}')
+                .then(function(){
+                    swal('操作成功', '', 'success')
+                    .then(function(){
+                        location.reload();
+                    });
+                });
             });
         });
     </script>

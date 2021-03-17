@@ -45,4 +45,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(UserAddress::class);
     }
+
+    public function favoriteProducts()
+    {
+        //belongsToMany 多对多关系，第一个参数是要关联表的类名，第二个参数为中间表的表名
+        return $this->belongsToMany(Product::class, 'user_favorite_products')
+                    ->withTimestamps()
+                    ->orderBy('user_favorite_products.created_at', 'desc');
+    }
 }
