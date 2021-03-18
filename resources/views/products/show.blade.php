@@ -28,17 +28,17 @@
                         <div class="skus">
                             <label>选择</label>
                             <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                @foreach ($product->skus as $sku)
-                                    <lable class = "btn sku-btn" 
-                                    data-price = "{{ $sku->price }}"
-                                    data-stock = "{{ $sku->stock }}"
-                                    data-toggle = "tooltip"
-                                    data-placement="bottom"
-                                    title="{{ $sku->description}}">
-                                        <input type="radio" name="skus" autocomplete="off" value="{{ $sku->id }}"> 
-                                        {{ $sku->title}}
-                                    </lable>
-                                @endforeach
+                            @foreach($product->skus as $sku)
+                            <label
+                                class="btn sku-btn"
+                                data-price="{{ $sku->price }}"
+                                data-stock="{{ $sku->stock }}"
+                                data-toggle="tooltip"
+                                title="{{ $sku->description }}"
+                                data-placement="bottom">
+                                <input type="radio" name="skus" autocomplete="off" value="{{ $sku->id }}"> {{ $sku->title }}
+                            </label>
+                            @endforeach
                             </div>
                         </div>
                         <div class="cart_amount">
@@ -115,6 +115,35 @@
                         location.reload();
                     });
                 });
+            });
+
+            //加入库存
+            $('.btn-add-to-cart').click(function(){
+                axios.post(
+                    '{{ route('cart.add') }}',
+                    {sku_id: $('label.active input[name=skus]').val(),
+                    amount: $('.cart_amount input').val(),
+                    },)
+                    .then(function(){
+                        swal('加入购物车成功','', 'success').then(function(){
+                            location.href = '{{ route('cart.index') }}';
+                        });
+                    }, function(error){
+                        if (error.response.status === 401) {
+                            swal('请先登陆', '', 'error');
+                        } else if (error.response.status === 422) {
+                            var html = '<div>';
+                            _.each(error.response.data.errors, function(errors){
+                                _.each(errors, function(error){
+                                    html += error + '<br>';
+                                })
+                            });
+                            html += '</div>';
+                            swal({content: $(html)[0], icon: 'error'})
+                        } else {
+                            swal('系统错误', '', 'error');
+                        }
+                    })
             });
         });
     </script>
