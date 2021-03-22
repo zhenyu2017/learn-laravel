@@ -228,5 +228,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+    
+    'order_ttl' => 86400,  //订单未支付关闭时间
 
 ];
