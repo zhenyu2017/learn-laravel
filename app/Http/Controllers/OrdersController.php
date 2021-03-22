@@ -25,6 +25,7 @@ class OrdersController extends Controller
 
         return view('orders.index', ['orders' => $orders]);
     }
+
     public function store(OrderRequest $request)
     {
         $user = $request->user();
@@ -78,5 +79,11 @@ class OrdersController extends Controller
         });
 
         return $order; //返回执行失败的结果
+    }
+
+    public function show (Order $order)
+    {
+        $this->authorize('own', $order);
+        return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
     }
 }

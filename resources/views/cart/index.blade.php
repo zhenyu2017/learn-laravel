@@ -138,7 +138,7 @@
             axios.post('{{ route('orders.store') }}', req)
                     .then(function(response){
                         swal('订单创建成功', '', 'success').then(function(){
-                            location.reload();
+                            location.href = '/orders/' + response.data.id;
                         });
                     },function(error){
                         if (error.response.status === 422) {
