@@ -433,7 +433,25 @@ return [
             'theme' => 'snow',
             'height' => '200px',
         ]
-    ]
+        ],
     // 新增编辑器配置结束
+
+    'configx' => [
+        // Set to `false` if you want to disable this extension
+        'enable' => true,
+        'tabs' => [
+            'base' => '基本设置',
+            'shop' => '店铺设置',
+            'uplaod' => '上传设置',
+            'alipay' => '阿里支付设置',
+            'wechatpay' => '微信支付设置',
+            // 'image' => '' // if tab name is empty, get from trans : trans('admin.configx.tabs.image'); tab名称留空则从翻译中获取
+        ],
+        // Whether check group permissions.
+        //if (!Admin::user()->can('confix.tab.base')) {/*hide base tab*/ } .
+        'check_permission' => false,
+        'break_when_errors' => false // do not save anything if have errors
+    ],
+    
     ],
 ];
