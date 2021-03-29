@@ -8,6 +8,8 @@ use Monolog\Logger;
 use Yansongda\Pay\Pay;
 
 
+
+
 class AppServiceProvider extends ServiceProvider
 {
     
@@ -18,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+      
+    //    dd(config('alipay.appid'));
       $this->app->singleton('alipay', function(){
         $config = config('pay.alipay');
         if (app()->environment() !== 'production') {
@@ -51,5 +55,8 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         \Illuminate\Pagination\Paginator::useBootstrap();
+   
+               
+        
     }
 }

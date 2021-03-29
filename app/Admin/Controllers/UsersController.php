@@ -8,6 +8,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
+
 class UsersController extends AdminController
 {
     /**
@@ -24,6 +25,8 @@ class UsersController extends AdminController
      */
     protected function grid()
     {
+ 
+        // dd(Config::get('settings.contact_email'));
         $grid = new Grid(new User());
 
         $grid->id('ID');
