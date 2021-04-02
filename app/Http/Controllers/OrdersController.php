@@ -13,6 +13,7 @@ use Carbon\Exceptions\InvalidIntervalException;
 use App\Http\Requests\SendReviewRequest;
 use Carbon\Carbon;
 use App\Events\OrderReviewed;
+use App\Http\Requests\ApplyRefundRequest;
 
 class OrdersController extends Controller
 {
@@ -97,5 +98,25 @@ class OrdersController extends Controller
          event(new OrderReviewed($order));
 
          return redirect()->back();
+    }
+
+    public function applyRefund(Order $order,ApplyRefundRequest $request)
+    {
+        $this->authorize('own', $order);
+        if (!$order->paid_at) {
+            throw new InvalidRequestException('订单还没有支付，不可退款');
+        }
+        if ($order->refund_status !== Order::REFUND_STATUS_PENDING) {
+            throw new InvalidRequestException('已申请过退款，不要重复申请');
+        }
+        $extra = $order->extra ?: [];
+        $extra['refund_reason'] = $request->input('reason');
+
+        $order->update([
+            'refund_status' =>Order::REFUND_STATUS_APPLIED,
+            'extra' => $extra,
+        ]);
+
+        return $order;
     }
 }
