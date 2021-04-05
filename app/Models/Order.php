@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 
 class Order extends Model
 {
@@ -80,6 +81,7 @@ class Order extends Model
         $prefix = date('YmdHis');
         for ($i = 0; $i < 10; $i++){
             $no = $prefix.str_pad(random_int(0,999999), 6, '0', STR_PAD_LEFT);
+            //如果不存在$no 就返回$no
             if (!static::query()->where('no',$no)->exists()){
                 return $no;
             }
@@ -101,4 +103,12 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public static function getAvailableRefundNo()
+    {
+        do {
+            $no = Uuid::uuid4()->getHex();
+        } while (self::query()->where('refund_no', $no)->exists()); //如是存在$no 就重新生成一个
+
+        return $no;
+    }
 }
