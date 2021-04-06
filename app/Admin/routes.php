@@ -22,7 +22,10 @@ Route::group([
     $router->get('orders/{order}', 'OrdersController@show')->name('admin.orders.show');
     $router->post('orders/{order}/ship', 'OrdersController@ship')->name('admin.orders.ship');
     $router->post('orders/{order}/refund', 'OrdersController@handleRefund')->name('admin.orders.handle_refund');
-    $router->get('coupon_codes', 'CouponCodeController@index');
-    $router->post('coupon_codes', 'CouponCodeController@store');
-    $router->get('coupon_codes/create', 'CouponCodeController@create');
+    $router->get('coupon_code', 'CouponCodeController@index')->name('admin.coupon_code');
+    $router->post('coupon_code', 'CouponCodeController@store')->name('admin.coupon_code.store');
+    $router->get('coupon_code/create', 'CouponCodeController@create');
+    $router->get('coupon_code/{id}/edit', 'CouponCodeController@edit');
+    $router->put('coupon_code/{id}', 'CouponCodeController@update')->name('admin.coupon_code.update');
+    $router->delete('coupon_code/{id}', 'CouponCodeController@distroy');
 });
