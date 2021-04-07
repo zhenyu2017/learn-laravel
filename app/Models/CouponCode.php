@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Support\Str;
+use App\Exceptions\CouponCodeUnavailableException;
+use Carbon\Carbon;
+use App\Models\User;
 
 class CouponCode extends Model
 {
@@ -81,5 +84,45 @@ class CouponCode extends Model
         } else {
             return $this->decrement('used');
         }
- }
+    }
+
+    public function checkAvailable(User $user, $orderAmount = null)
+    {
+        if (!$this->enabled) {
+            throw new CouponCodeUnavailableException('优惠卷不存在');
+        }
+
+        if ($this->total - $this->used <= 0) {
+            throw new CouponCodeUnavailableException('该优惠卷已被兑完');
+        }
+
+        if ($this->not_before && $this->not_before->gt(Carbon::now())) {
+            throw new CouponCodeUnavailableException('该优惠卷还不能使用');
+        }
+
+        if ($this->not_after && $this->not_after->lt(Carbon::now())) {
+            throw new CouponCodeUnavailableException('优惠卷已过期');
+        }
+
+        if (!is_null($orderAmount) && $orderAmount < $this->min_amount) {
+            throw new CouponCodeUnavailableException('订单金额不满足优惠条件');
+        }
+
+        $used = Order::where('user_id', $user->id)
+        ->where('coupon_code_id', $this->id)
+        ->where(function($query){
+            $query->where(function($query){
+                $query->whereNull('paid_at')
+                ->where('closed', false);
+            })->orWhere(function($query){
+                $query->whereNotNull('paid_at')
+                ->where('refund_status', '!=', Order::REFUND_STATUS_SUCCESS);
+            });
+        })->exists();
+
+        if ($used) {
+            throw new CouponCodeUnavailableException('你已经使用过这张优惠卷');
+        }
+    }
+
 }

@@ -167,6 +167,8 @@
                             });
                             html += '</div>';
                             swal({content: $(html)[0], icon: 'icon'});
+                        } else if(error.response.status === 403){
+                          swal(error.response.data.msg, '', 'error');
                         } else {
                             swal ('系统错误', '', 'error');
                         }
