@@ -13,20 +13,20 @@ class CreateCouponCodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('coupon_codes', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('code')->unique();
-            $table->string('type');
-            $table->decimal('value');
-            $table->unsignedInteger('total');
-            $table->unsignedInteger('used')->default(0);
-            $table->datetime('not_before')->nullable();
-            $table->datetime('not_after')->nullable();
-            $table->boolean('enabled');
+        // Schema::create('coupon_codes', function (Blueprint $table) {
+        //     $table->bigIncrements('id');
+        //     $table->string('name');
+        //     $table->string('code')->unique();
+        //     $table->string('type');
+        //     $table->decimal('value');
+        //     $table->unsignedInteger('total');
+        //     $table->unsignedInteger('used')->default(0);
+        //     $table->datetime('not_before')->nullable();
+        //     $table->datetime('not_after')->nullable();
+        //     $table->boolean('enabled');
 
-            $table->timestamps();
-        });
+        //     $table->timestamps();
+        // });
     }
 
     /**
