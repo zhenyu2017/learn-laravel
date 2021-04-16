@@ -104,7 +104,7 @@ class CategoriesController extends AdminController
     public function apiIndex(Request $request)
     {
         $search = $request->input('q');
-        $result = Category::query()->where('is_directory', true)
+        $result = Category::query()->where('is_directory', boolval($request->input('is_directory')))
         ->where('name', 'like', '%'. $search . '%')
         ->paginate();
 
