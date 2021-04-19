@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Exceptions\InvalidRequestException;
 use App\Models\Category;
 use App\Models\OrderItem;
+// use App\Services\CategoryService;
 
 class ProductsController extends Controller
 {
@@ -57,6 +58,7 @@ class ProductsController extends Controller
             'products' => $products, 
             'filters' => [ 'search' => $search, 'order' => $order,],
             'category' => $category ?? null,
+            // 'categoryTree' => $categoryService->getCategoryTree(),
             ]);
     }
 
